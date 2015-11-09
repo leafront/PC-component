@@ -1,0 +1,2 @@
+# javascriptComponent
+基于jQuery写的一些常用效果插件
