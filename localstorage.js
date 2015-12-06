@@ -1,6 +1,7 @@
 define(function(require,exports,module){
         var UserData = {
             userData : null,
+            name:location.hostname,
             init:function(){
                 if (!UserData.userData) {
                     try {
@@ -76,5 +77,6 @@ define(function(require,exports,module){
                 localStorage.removeItem(key);
             }
         }
+        module.exports=localStorage;
 });
 
