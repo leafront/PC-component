@@ -50,6 +50,9 @@ define(function(require,exports,module){
             if(!window.localStorage){
                 UserData.setItem(key,value);
             }else{
+                if(Object.prototype.toString.call(value)=='[object Object]'){
+                    var value=JSON.stringify(value);
+                }
                 localStorage.setItem(key,value);
             }
         },
@@ -63,6 +66,9 @@ define(function(require,exports,module){
                 }
             }else{
                 if(localStorage.getItem(key)!=null){
+                    if(localStorage.getItem(key).slice(0,1)=='{'){
+                        value=JSON.parse(localStorage.getItem(key));
+                    }
                     value=localStorage.getItem(key);
                 }else{
                     //Do Nothing!
