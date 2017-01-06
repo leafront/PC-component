@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <title></title>
+    <link rel="stylesheet" href = 'datePiker.css'/>
+    <script type = "text/javascript" src = "template.js"></script>
+    <script type = "text/javascript" src = "iScroll.js"></script>
+    <script type = "text/javascript" src = "zepto.js"></script>
+  </head>
+  <body>
+    <div class="weui-picker weui-animate-slide-up">
+   </div>
+    <script type = "text/javascript" src = "datePicker.js"></script>
+    <script>
+      var datePicker = new DatePicker({
+        start: 1980,
+        end: new Date().getFullYear(),
+        selectValue: [2017,07,31],
+        onConfirm: function(result){
+          console.log(result);
+        }
+      })
+      datePicker.showPicker();
+    </script>
+  </body>
+</html>
