@@ -8,64 +8,8 @@ function DatePicker(options){
 }
 DatePicker.prototype = {
   constructor: 'DatePicker',
-  renderView: function (data) {
-    var tpl = `
-      <div class = "weui-picker__hd">
-        <span data-action="cancel" class="weui-picker__action" id="weui-picker-cancel">取消</span>
-        <span data-action="select" class="weui-picker__action" id="weui-picker-confirm">确定</sp>
-      </div>
-      <div class = "weui-picker__bd">
-        <div class="weui-picker__group" id = "webui-year">
-          <ul class="weui-picker__content">
-            <% for (var num = 0; num < 3; num++){%>
-              <li></li>
-            <% }%>
-            <% for (var i = 0; i < data.length; i++){%>
-              <li data-date = "<%= data[i].value %>" class="weui-picker__item"><%= data[i].label%></li>
-            <% }%>
-            <% for (var num = 0; num < 3; num++){%>
-              <li></li>
-            <% }%>
-          </ul>
-          <div class="weui-picker__mask"></div>
-          <div class="weui-picker__indicator"></div>
-       </div>
-       <div class="weui-picker__group" id = "webui-month">
-         <ul class="weui-picker__content">
-           <% for (var num = 0; num < 3; num++){%>
-             <li></li>
-           <% }%>
-           <% for (var j = 0; j < data[selectYear].children.length; j++) {%>
-             <li data-date = "<%= data[selectYear].children[j].value %>" class="weui-picker__item"><%=  data[selectYear].children[j].label%></li>
-           <%}%>
-           <% for (var num = 0; num < 3; num++){%>
-             <li></li>
-           <% }%>
-         </ul>
-         <div class="weui-picker__mask"></div>
-         <div class="weui-picker__indicator"></div>
-      </div>
-      <div class="weui-picker__group" id = "webui-date">
-        <ul class="weui-picker__content">
-          <% for (var num = 0; num < 3; num++){%>
-            <li></li>
-          <% }%>
-          <% for (var k = 0; k < data[selectYear].children[selectMonth].children.length; k++ ){%>
-            <li  <li data-date = "<%= data[selectYear].children[selectMonth].children[k].value %>" class="weui-picker__item"> <%=  data[selectYear].children[selectMonth].children[k].label%></li>
-          <%}%>
-          <% for (var num = 0; num < 3; num++){%>
-            <li></li>
-          <% }%>
-        </ul>
-        <div class="weui-picker__mask"></div>
-        <div class="weui-picker__indicator"></div>
-     </div></div>`;
-    var render = template.compile(tpl);
-    var html = render({'data': data, selectYear: this.selectValue[0], selectMonth: this.selectValue[1]});
-    $('.weui-picker').html(html);
-  },
-  showPicker: function () {
-    document.addEventListener('touchmove', function (e) {
+  showPicker () {
+    document.addEventListener('touchmove', (e) => {
      //取消事件的默认动作
      e.preventDefault();
     }, false);
@@ -100,43 +44,85 @@ DatePicker.prototype = {
         };
         data.push(year);
     }
-    var self = this;
     this.selectValue = [this.selectYear, this.selectMonth, this.selectDate];
     this.renderView(data);
     this.scrollList(data);
     this.onCancel();
     this.confirm();
   },
-  scrollList: function(data) {
+  scrollList (data) {
     var self = this;
+    this.scroll = []
     var itemHeight = $('.weui-picker__item').eq(0).height();
-      $('.weui-picker__group').each(function(idx,item) {
-        var iscroll = new IScroll(this, {
-          scrollX: false
-        });
-        iscroll.on('scrollEnd', function() {
-          var result = ( -this.y / itemHeight);
-          var index = parseInt(result, 10);
-          var diff = result - index;
-          if (diff > 0.5) index ++;
-          self.selectValue[idx] = index;
-          self.renderView(data);
-          self.scrollList(data);
-          iscroll.scrollTo(0, -index * itemHeight);
-          self.confirm();
-        })
-        iscroll.scrollTo(0, -self.selectValue[idx] * itemHeight);
+    var len = $('.weui-picker__group').length;
+    $('.weui-picker__group').each(function(idx,item) {
+      var iscroll = new IScroll(this, {
+        scrollX: false
       })
+      self.scroll.push(iscroll);
+      iscroll.on('scrollEnd', function() {
+        var result = ( -this.y / itemHeight);
+        var index = parseInt(result, 10);
+        var diff = result - index;
+        if (diff > 0.5) index ++;
+        self.selectValue[idx] = index;
+        self.renderView(data);
+        self.scroll[len-1].refresh();
+        iscroll.scrollTo(0, -index * itemHeight);
+      })
+      iscroll.scrollTo(0, -self.selectValue[idx] * itemHeight);
+    })
   },
-  onCancel: function () {
-    $('#weui-picker-cancel').click(function(){
+  renderView (data){
+    var element = ['#webui-year','#webui-month','#webui-date'];
+    var tpl = [`
+      <% for (var num = 0; num < 3; num++){%>
+        <li></li>
+      <% }%>
+      <% for (var i = 0; i < data.length; i++){%>
+        <li data-date = "<%= data[i].value %>" class="weui-picker__item"><%= data[i].label%></li>
+      <% }%>
+      <% for (var num = 0; num < 3; num++){%>
+        <li></li>
+      <% }%>`,
+      `<% for (var num = 0; num < 3; num++){%>
+         <li></li>
+       <% }%>
+       <% for (var j = 0; j < month.length; j++) {%>
+         <li data-date = "<%= month[j].value %>" class="weui-picker__item"><%=  month[j].label%></li>
+       <%}%>
+       <% for (var num = 0; num < 3; num++){%>
+         <li></li>
+       <% }%>`,
+       `<% for (var num = 0; num < 3; num++){%>
+         <li></li>
+       <% }%>
+       <% for (var k = 0; k < date.length; k++ ){%>
+         <li data-date = "<%= date[k].value %>" class="weui-picker__item"> <%=  date[k].label%></li>
+       <%}%>
+       <% for (var num = 0; num < 3; num++){%>
+         <li></li>
+       <% }%>`
+    ];
+    var month = data[this.selectValue[0]].children;
+    var date = month[this.selectValue[1]].children;
+    var renderData = [{data: data,attr: 'data'},{data: month,attr: 'month'},{data: date,attr: 'date'}]
+    tpl.forEach((item,index) => {
+      var render = template.compile(tpl[index]);
+      var html = render({[renderData[index].attr]: renderData[index].data});
+      $(element[index]).html(html);
+    })
+  },
+  onCancel () {
+    $('#weui-picker-cancel').click(() => {
       $('.weui-picker').empty();
     })
   },
-  confirm: function () {
+  confirm () {
     var value = []
     $('#weui-picker-confirm').click(() => {
       value = this.selectValue[0] + this.start + '年' + (this.selectValue[1] + 1) + '月' + (this.selectValue[2] + 1) + '日';
+      $('.weui-picker').empty();
       this.onConfirm(value);
     })
   }
