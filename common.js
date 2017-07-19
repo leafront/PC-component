@@ -153,7 +153,7 @@ function shuffle(arr) {
         arr[i] = arr[j];
         arr[j] = temp;
     }
-     return arr;    
+     return arr;
 };
 
 
@@ -182,12 +182,12 @@ function formatCash(cash){
 function hasClass(ele,cls) {
     return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
- 
+
 // 给指定对象添加className
 function addClass(ele,cls) {
     if (!this.hasClass(ele,cls)) ele.className += " "+cls;
 }
- 
+
 // 删除className
 function removeClass(ele,cls) {
     if (hasClass(ele,cls)) {
@@ -231,7 +231,7 @@ window.addEventListener('scroll',throttle(realFunc,500,1000));
 
 
 var countdown = 5 * 24 * 3600;
- 
+
 // 立即显示还剩五天
 console.log("还剩余5天0小时0分0秒");
 // 倒计时
@@ -239,9 +239,9 @@ var countdownTimer = setInterval(function () {
     // 倒计时到零时，停止倒计时
     if (countdown <= 0)
         return clearInterval(countdownTimer);
- 
+
     countdown -= 1;
- 
+
     var rest = countdown;
     // 天
     var days = parseInt(rest / (24 * 3600), 10);
@@ -254,44 +254,6 @@ var countdownTimer = setInterval(function () {
     rest -= minutes * 60;
     // 秒
     var seconds = parseInt(rest, 10);
- 
+
     console.log("还剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒");
 }, 1e3);
-
-
-
-Date.prototype.pattern=function(fmt) { 
-var o = { 
-"M+" : this.getMonth()+1, //月份 
-"d+" : this.getDate(), //日 
-"h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时 
-"H+" : this.getHours(), //小时 
-"m+" : this.getMinutes(), //分 
-"s+" : this.getSeconds(), //秒 
-"q+" : Math.floor((this.getMonth()+3)/3), //季度 
-"S" : this.getMilliseconds() //毫秒 
-}; 
-var week = { 
-"0" : "\u65e5", 
-"1" : "\u4e00", 
-"2" : "\u4e8c", 
-"3" : "\u4e09", 
-"4" : "\u56db", 
-"5" : "\u4e94", 
-"6" : "\u516d" 
-}; 
-if(/(y+)/.test(fmt)){ 
-fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-} 
-if(/(E+)/.test(fmt)){ 
-fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]); 
-} 
-for(var k in o){ 
-if(new RegExp("("+ k +")").test(fmt)){ 
-fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
-} 
-} 
-return fmt; 
-} 
-
-
